@@ -33,6 +33,12 @@ class CourseDataService {
   getAllCourses = () => {
     return getDocs(courseCollectionRef);
   };
+
+  // Get Course by Id
+  getCourse = (id) => {
+    const courseDoc = doc(db, "courses", id);
+    return getDoc(courseDoc);
+  };
 }
 
 export default new CourseDataService();
