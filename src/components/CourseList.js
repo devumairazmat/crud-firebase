@@ -1,4 +1,4 @@
-import { doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Table, Button } from "react-bootstrap";
@@ -17,10 +17,12 @@ function CourseList() {
     setName(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
+
+
   return (
     <>
       <div className="mb-2">
-        <Button variant="dark edit">Refresh List</Button>
+        <Button variant="dark edit" onClick={getCourses}>Refresh List</Button>
       </div>
       {/* <pre>{JSON.stringify(name, undefined, 2)}</pre> */}
       <Table striped bordered hover size="sm">
@@ -42,10 +44,16 @@ function CourseList() {
                 <td>{doc.trainer}</td>
                 <td>{doc.status}</td>
                 <td>
-                  <Button variant="secondary" className="edit">
+                  <Button
+                    variant="secondary"
+                    className="m-1  edit"
+                    // onClick={(e) => getNameId(doc.id)}
+                  >
                     Edit
                   </Button>
-                  <Button variant="danger" className="delete">
+                  <Button variant="danger" className="m-1  delete"
+                  // onClick={(e) => deleteHandler(doc.id)}
+                  >
                     Delete
                   </Button>
                 </td>
