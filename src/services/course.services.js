@@ -22,8 +22,12 @@ class CourseDataService {
     const courseDoc = doc(db, "courses", id);
     return updateDoc(courseDoc, updateCourse);
   };
-
   
+  // Delete Course
+  deleteCourse = (id) => {
+    const courseDoc = doc(db, "courses", id);
+    return deleteDoc(courseDoc);
+  };
 }
 
 export default new CourseDataService();
