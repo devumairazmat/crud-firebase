@@ -7,7 +7,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-} from "./firebase-services";
+} from "firebase/firestore";
 
 const courseCollectionRef = collection(db, "courses");
 
