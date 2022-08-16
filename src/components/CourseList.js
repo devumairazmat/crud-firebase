@@ -17,6 +17,10 @@ function CourseList() {
     setName(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
+  const deleteHandler = async (id) => {
+    await CourseDataService.deleteCourse(id);
+    getCourses();
+  };
 
 
   return (
@@ -52,7 +56,7 @@ function CourseList() {
                     Edit
                   </Button>
                   <Button variant="danger" className="m-1  delete"
-                  // onClick={(e) => deleteHandler(doc.id)}
+                  onClick={(e) => deleteHandler(doc.id)}
                   >
                     Delete
                   </Button>
