@@ -1,16 +1,28 @@
-import React from "react";
+import { doc } from "firebase/firestore";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Table, Button } from "react-bootstrap";
-
+import CourseDataService from "../services/course.services";
 
 function CourseList() {
+  const [name, setName] = useState([]);
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  const getCourses = async () => {
+    const data = await CourseDataService.getAllCourses();
+    console.log(data.docs);
+    setName(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   return (
     <>
       <div className="mb-2">
         <Button variant="dark edit">Refresh List</Button>
       </div>
-
-      {/* <pre>{JSON.stringify(books, undefined, 2)}</pre>} */}
+      {/* <pre>{JSON.stringify(name, undefined, 2)}</pre> */}
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -22,11 +34,13 @@ function CourseList() {
           </tr>
         </thead>
         <tbody>
-              <tr>
-                <td>1</td>
-                <td>Moile App Dev</td>
-                <td>Uzair</td>
-                <td>Available</td>
+          {name.map((doc, index) => {
+            return (
+              <tr key={doc.id}>
+                <td>{index + 1}</td>
+                <td>{doc.name}</td>
+                <td>{doc.trainer}</td>
+                <td>{doc.status}</td>
                 <td>
                   <Button variant="secondary" className="edit">
                     Edit
@@ -36,6 +50,8 @@ function CourseList() {
                   </Button>
                 </td>
               </tr>
+            );
+          })}
         </tbody>
       </Table>
     </>
