@@ -1,38 +1,64 @@
 import React from "react";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import { Form, Alert, InputGroup, Button, ButtonGroup } from "react-bootstrap";
-import CourseDataService from "../services/course.services"
+import CourseDataService from "../services/course.services";
 
-function AddCourse() {
+function AddCourse({ id, setNameId }) {
   const [name, setName] = useState("");
   const [trainer, setTrainer] = useState("");
   const [status, setStatus] = useState("Available");
   const [flag, setFlag] = useState(true);
-  const [message, setMessage] = useState({error:false, msg: "" });
+  const [message, setMessage] = useState({ error: false, msg: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     if (name === "" || trainer === "") {
-      setMessage({error:true, msg: "Please fill all the fields" });
+      setMessage({ error: true, msg: "Please fill all the fields" });
       return;
     }
     const newCourse = {
       name,
       trainer,
-      status
+      status,
     };
     console.log(newCourse);
     try {
-     await CourseDataService.addCourses(newCourse);
-     setMessage({error:false, msg: "Course added successfully" });
-    }
-    catch (error) {
-      setMessage({error:true, msg: "Error adding course" });
+      if (id !== undefined && id !== "") {
+        await CourseDataService.updateCourse(id,newCourse);
+        setNameId("");
+        setMessage({ error: false, msg: "Course Updated successfully" });
+      } else {
+        await CourseDataService.addCourses(newCourse);
+        setMessage({ error: false, msg: "Course added successfully" });
+      }
+      
+    } catch (error) {
+      setMessage({ error: true, msg: "Error adding course" });
     }
     setName("");
     setTrainer("");
-  }
+  };
+
+  const editHandler = async () => {
+    setMessage("");
+    try {
+      const docSnap = await CourseDataService.getCourse(id);
+      console.log("the record is :", docSnap.data());
+      setName(docSnap.data().name);
+      setTrainer(docSnap.data().trainer);
+      setStatus(docSnap.data().status);
+    } catch (err) {
+      setMessage({ error: true, msg: err.message });
+    }
+  };
+
+  useEffect(() => {
+    console.log("The id here is : ", id);
+    if (id !== undefined && id !== "") {
+      editHandler();
+    }
+  }, [id]);
 
   return (
     <>
@@ -46,8 +72,8 @@ function AddCourse() {
             {message?.msg}
           </Alert>
         )}
-        
-        <Form onSubmit={handleSubmit} >
+
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formCourseTitle">
             <InputGroup>
               <InputGroup.Text id="formCourseTitle">Course</InputGroup.Text>
@@ -71,7 +97,7 @@ function AddCourse() {
             </InputGroup>
           </Form.Group>
           <ButtonGroup aria-label="Basic example" className="mb-3">
-          <Button
+            <Button
               disabled={flag}
               variant="success"
               onClick={(e) => {

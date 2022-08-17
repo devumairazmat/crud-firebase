@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import CourseDataService from "../services/course.services";
 
-function CourseList() {
+function CourseList({ getNameId }) {
   const [name, setName] = useState([]);
 
   useEffect(() => {
@@ -22,11 +22,12 @@ function CourseList() {
     getCourses();
   };
 
-
   return (
     <>
       <div className="mb-2">
-        <Button variant="dark edit" onClick={getCourses}>Refresh List</Button>
+        <Button variant="dark edit" onClick={getCourses}>
+          Refresh List
+        </Button>
       </div>
       {/* <pre>{JSON.stringify(name, undefined, 2)}</pre> */}
       <Table striped bordered hover size="sm">
@@ -51,12 +52,14 @@ function CourseList() {
                   <Button
                     variant="secondary"
                     className="m-1  edit"
-                    // onClick={(e) => getNameId(doc.id)}
+                    onClick={(e) => getNameId(doc.id)}
                   >
                     Edit
                   </Button>
-                  <Button variant="danger" className="m-1  delete"
-                  onClick={(e) => deleteHandler(doc.id)}
+                  <Button
+                    variant="danger"
+                    className="m-1  delete"
+                    onClick={(e) => deleteHandler(doc.id)}
                   >
                     Delete
                   </Button>
