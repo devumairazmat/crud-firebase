@@ -4,6 +4,7 @@ import "./App.css";
 import AddCourse from "./components/AddCourse";
 import CourseList from "./components/CourseList";
 import { useState } from "react";
+import Footer from "./components/Footer";
 
 function App() {
   const [nameId, setNameId] = useState("");
@@ -33,6 +34,7 @@ function App() {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </>
   );
 }
